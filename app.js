@@ -13,5 +13,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {  
     console.log(`App listening at http://localhost:${port}`);
 });
-
-//mongodb+srv://UjwalXtha:ujwal079@cluster0.na4nlex.mongodb.net/?appName=Cluster0
