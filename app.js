@@ -1,0 +1,17 @@
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const port = process.env.PORT;
+const connectDB = require('./database/index.js');
+
+connectDB();    
+
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+app.listen(port, () => {  
+    console.log(`App listening at http://localhost:${port}`);
+});
+
+//mongodb+srv://UjwalXtha:ujwal079@cluster0.na4nlex.mongodb.net/?appName=Cluster0
