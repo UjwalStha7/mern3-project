@@ -4,7 +4,8 @@ const app = express();
 const port = process.env.PORT;
 const connectDB = require('./database/index.js');
 const Blog = require('./model/blogModel.js');
-
+const { multer, storage } = require('./middleware/multerConfig.js');
+const upload = multer({ storage: storage });
 app.use(express.json());
 
 connectDB();    
@@ -13,7 +14,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.post("/blog", async (req, res) => {
+app.post("/blog", upload.single('image'), async (req, res) => {
     //console.log(req.body);
     const { title, description, subtitle, image} = req.body;
     if(!title || !description || !subtitle || !image){
