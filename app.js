@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.post("/blog", upload.single('image'), async (req, res) => {
+app.post("/blog", async (req, res) => {
     //console.log(req.body);
     const { title, description, subtitle, image} = req.body;
     if(!title || !description || !subtitle || !image){
@@ -29,6 +29,13 @@ app.post("/blog", upload.single('image'), async (req, res) => {
         image : image
     });
     res.send("Blog api hit successfully");
+});
+
+app.post("/upload", upload.single('image'), (req, res) => {
+    res.status(200).json({
+        message : "File uploaded successfully",
+        file : req.file
+    });
 });
 
 app.listen(port, () => {  
