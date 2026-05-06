@@ -62,7 +62,7 @@ app.post("/upload", upload.single('image'), async (req, res) => {
     console.log(req.file);
     res.status(200).json({
         message : "File uploaded successfully",
-    }); b
+    }); 
 });
 
 app.get("/upload", async (req, res) => {
