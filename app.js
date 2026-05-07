@@ -6,6 +6,7 @@ const connectDB = require('./database/index.js');
 const Blog = require('./model/blogModel.js');
 const { multer, storage } = require('./middleware/multerConfig.js');
 const upload = multer({ storage: storage });
+const fs = require('fs'); //built-in package to work with file system
 app.use(express.json());
 
 connectDB();    
@@ -43,6 +44,7 @@ app.post("/blog", async (req, res) => {
 //     });
 // });
 
+//upload route to upload file and save data in database
 app.post("/upload", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
     const filename = req.file.filename;
@@ -65,6 +67,7 @@ app.post("/upload", upload.single('image'), async (req, res) => {
     }); 
 });
 
+//all data retrieval
 app.get("/upload", async (req, res) => {
     const blogs = await Blog.find(); //returns array
     res.status(200).json({
@@ -73,7 +76,59 @@ app.get("/upload", async (req, res) => {
     });
 })
 
-app.use(express.static('./storage'));
+//single data retrieval using id
+app.get("/upload/:id", async (req, res) => { 
+    //console.log(req.params.id);
+    const id = req.params.id;
+    const blog = await Blog.findById(id); //returns object and if multiple data then in array.
+    if(!blog){
+        return res.status(404).json({
+            message : "Blog not found"
+        });
+    }
+    res.status(200).json({
+        message : "Blog fetched successfully",
+        data : blog
+    });
+});
+
+//delete data using id
+app.delete("/upload/:id", async (req, res) => {
+    const id = req.params.id;
+    await Blog.findByIdAndDelete(id);
+    fs.unlink(`./storage/${id}.jpg`, (err) => { //delete image from storage folder
+        if(err){
+            console.log(err);
+        }else{
+            console.log("File deleted successfully");
+        }   
+    });
+    res.status(200).json({
+        message : "Blog deleted successfully"
+    });
+});
+
+//update data using id 
+app.patch("/upload/:id", async (req, res) => {
+    const id = req.params.id;
+    const { title, subtitle, description} = req.body;
+    const blog = await Blog.findByIdAndUpdate(id, {
+        title : title,
+        subtitle : subtitle,
+        description : description
+    }, { new: true });
+    if(!blog){
+        return res.status(404).json({
+            message : "Blog not found"
+        });
+    }
+    res.status(200).json({
+        message : "Blog updated successfully",
+        data : blog
+    });
+});
+
+app.use(express.static('./storage')); //provide access to storage folder to access images
 
 app.listen(port, () => {  
     console.log(`App listening at http://localhost:${port}`);
