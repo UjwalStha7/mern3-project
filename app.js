@@ -95,33 +95,59 @@ app.get("/upload/:id", async (req, res) => {
 //delete data using id
 app.delete("/upload/:id", async (req, res) => {
     const id = req.params.id;
-    await Blog.findByIdAndDelete(id);
-    fs.unlink(`./storage/${id}.jpg`, (err) => { //delete image from storage folder
+    const blog = await Blog.findById(id);
+    const imageName = blog.image; //get image name from database to delete the image from storage folder
+    fs.unlink(`./storage/${imageName}`, (err) => { //delete image from storage folder
         if(err){
             console.log(err);
         }else{
             console.log("File deleted successfully");
         }   
     });
+    await Blog.findByIdAndDelete(id);
     res.status(200).json({
         message : "Blog deleted successfully"
     });
 });
 
-//update data using id 
+//update textual data using id
 app.patch("/upload/:id", async (req, res) => {
     const id = req.params.id;
     const { title, subtitle, description} = req.body;
-    const blog = await Blog.findByIdAndUpdate(id, {
+    await Blog.findByIdAndUpdate(id, {
         title : title,
         subtitle : subtitle,
         description : description
-    }, { new: true });
-    if(!blog){
-        return res.status(404).json({
-            message : "Blog not found"
+    });
+    res.status(200).json({
+        message : "Blog updated successfully",
+        data : blog
+    });
+});
+
+//update image data using id
+app.patch("/upload/:id", upload.single('image'), async (req, res) => {
+    const id = req.params.id;
+    const { title, subtitle, description} = req.body;
+    let imageName;
+    if(req.file){
+        imageName = req.file.filename;
+        const blog = await Blog.findById(id);
+        const oldImageName = blog.image; //get image name from database to delete the image from storage folder
+        fs.unlink(`./storage/${oldImageName}`, (err) => { //delete image from storage folder
+            if(err){
+                console.log(err);
+            }else{
+                console.log("File deleted successfully");
+            }       
         });
     }
+    await Blog.findByIdAndUpdate(id, {
+        title : title,
+        subtitle : subtitle,
+        description : description,
+        image: imageName
+    });
     res.status(200).json({
         message : "Blog updated successfully",
         data : blog
