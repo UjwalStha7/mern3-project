@@ -8,6 +8,8 @@ const { multer, storage } = require('./middleware/multerConfig.js');
 const upload = multer({ storage: storage });
 const fs = require('fs'); //built-in package to work with file system
 app.use(express.json());
+const Comment = require('./model/commentModel.js');
+
 
 connectDB();    
 
@@ -170,6 +172,15 @@ app.post("/comment", async (req, res) => {
     });
     res.status(200).json({
         message : "Comment added successfully"
+    });
+}); 
+
+//Get api for comment
+app.get("/comment", async (req, res) => {
+    const comments = await Comment.find();
+    res.status(200).json({          
+        message : "Comments fetched successfully",
+        data : comments
     });
 });
 

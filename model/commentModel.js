@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = require("mongoose").Schema;
 
 const commentSchema = new Schema({
-    name{
+    name : {
         type : String
     },
-    comment{
+    comment : {
         type : String
     }
 });
