@@ -155,6 +155,24 @@ app.patch("/upload/:id", upload.single('image'), async (req, res) => {
 
 app.use(express.static('./storage')); //provide access to storage folder to access images
 
+
+//Comment api test purpose
+app.post("/comment", async (req, res) => {
+    const { name, comment} = req.body;
+    if(!name || !comment){
+        return res.status(400).json({
+            message : "Please provide all the required fields"
+        });
+    }
+    await Comment.create({
+        name : name,
+        comment : comment
+    });
+    res.status(200).json({
+        message : "Comment added successfully"
+    });
+});
+
 app.listen(port, () => {  
     console.log(`App listening at http://localhost:${port}`);
 });
