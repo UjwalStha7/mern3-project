@@ -111,19 +111,19 @@ app.delete("/upload/:id", async (req, res) => {
 });
 
 //update textual data using id
-app.patch("/upload/:id", async (req, res) => {
-    const id = req.params.id;
-    const { title, subtitle, description} = req.body;
-    await Blog.findByIdAndUpdate(id, {
-        title : title,
-        subtitle : subtitle,
-        description : description
-    });
-    res.status(200).json({
-        message : "Blog updated successfully",
-        data : blog
-    });
-});
+// app.patch("/upload/:id", async (req, res) => {
+//     const id = req.params.id;
+//     const { title, subtitle, description} = req.body;
+//     await Blog.findByIdAndUpdate(id, {
+//         title : title,
+//         subtitle : subtitle,
+//         description : description
+//     });
+//     res.status(200).json({
+//         message : "Blog updated successfully",
+//         data : blog
+//     });
+// });
 
 //update image data using id
 app.patch("/upload/:id", upload.single('image'), async (req, res) => {
@@ -150,7 +150,6 @@ app.patch("/upload/:id", upload.single('image'), async (req, res) => {
     });
     res.status(200).json({
         message : "Blog updated successfully",
-        data : blog
     });
 });
 
