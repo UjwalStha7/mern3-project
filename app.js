@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post("/blog", async (req, res) => {
+app.post("/upload", async (req, res) => {
     //console.log(req.body);
     const { title, description, subtitle, image} = req.body;
     if(!title || !description || !subtitle || !image){
@@ -47,7 +47,7 @@ app.post("/blog", async (req, res) => {
 // });
 
 //upload route to upload file and save data in database
-app.post("/upload", upload.single('image'), async (req, res) => {
+app.post("/blog", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
     const filename = req.file.filename;
     // const {filename} = req.body;   destructuring
@@ -70,7 +70,7 @@ app.post("/upload", upload.single('image'), async (req, res) => {
 });
 
 //all data retrieval
-app.get("/upload", async (req, res) => {
+app.get("/blog", async (req, res) => {
     const blogs = await Blog.find(); //returns array
     res.status(200).json({
         message : "Blogs fetched successfully",
@@ -79,7 +79,7 @@ app.get("/upload", async (req, res) => {
 })
 
 //single data retrieval using id
-app.get("/upload/:id", async (req, res) => { 
+app.get("/blog/:id", async (req, res) => { 
     //console.log(req.params.id);
     const id = req.params.id;
     const blog = await Blog.findById(id); //returns object and if multiple data then in array.
@@ -95,7 +95,7 @@ app.get("/upload/:id", async (req, res) => {
 });
 
 //delete data using id
-app.delete("/upload/:id", async (req, res) => {
+app.delete("/blog/:id", async (req, res) => {
     const id = req.params.id;
     const blog = await Blog.findById(id);
     const imageName = blog.image; //get image name from database to delete the image from storage folder
@@ -128,7 +128,7 @@ app.delete("/upload/:id", async (req, res) => {
 // });
 
 //update image data using id
-app.patch("/upload/:id", upload.single('image'), async (req, res) => {
+app.patch("/blog/:id", upload.single('image'), async (req, res) => {
     const id = req.params.id;
     const { title, subtitle, description} = req.body;
     let imageName;
