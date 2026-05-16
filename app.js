@@ -9,7 +9,15 @@ const upload = multer({ storage: storage });
 const fs = require('fs'); //built-in package to work with file system
 app.use(express.json());
 const Comment = require('./model/commentModel.js');
+const cors = require('cors');
 
+
+app.use(cors(
+    {
+    origin : 'http://localhost:5173' //allow access to frontend running on port 3000
+    }
+));
+ 
 
 connectDB();    
 
@@ -60,7 +68,7 @@ app.post("/blog", upload.single('image'), async (req, res) => {
         title : title,  //if name of key and value is same we can just write title
         subtitle : subtitle,
         description : description,
-        image : filename
+        image : filename //"http://localhost:3000/" + filename"
     });
     console.log(req.body); 
     console.log(req.file);
