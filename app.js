@@ -57,7 +57,12 @@ app.post("/upload", async (req, res) => {
 //upload route to upload file and save data in database
 app.post("/blog", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
-    const filename = req.file.filename;
+    let filename;
+    if(req.file){
+        filename = 'http://localhost:3000/' + req.file.filename;
+    }else{
+        filename = "https://i.pinimg.com/1200x/4e/00/9a/4e009ad7cf2c339c46ef5d1644798755.jpg"; //default image if no image is uploaded
+    }
     // const {filename} = req.body;   destructuring
     if(!title || !subtitle || !description){
         return res.status(400).json({
