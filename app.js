@@ -146,7 +146,7 @@ app.patch("/blog/:id", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
     let imageName;
     if(req.file){
-        imageName = req.file.filename;
+        imageName = 'http://localhost:3000/' + req.file.filename;
         const blog = await Blog.findById(id);
         const oldImageName = blog.image; //get image name from database to delete the image from storage folder
         fs.unlink(`./storage/${oldImageName}`, (err) => { //delete image from storage folder
