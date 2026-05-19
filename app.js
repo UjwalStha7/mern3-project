@@ -14,7 +14,7 @@ const cors = require('cors');
 
 app.use(cors(
     {
-    origin : 'http://localhost:5173' //allow access to frontend running on port 3000
+    origin : ['http://localhost:5173', 'https://mern3-project.onrender.com/'] //allow access to frontend running on port 3000
     }
 ));
  
@@ -59,7 +59,7 @@ app.post("/blog", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
     let filename;
     if(req.file){
-        filename = 'http://localhost:3000/' + req.file.filename;
+        filename = 'https://mern3-project.onrender.com/' + req.file.filename;
     }else{
         filename = "https://i.pinimg.com/1200x/4e/00/9a/4e009ad7cf2c339c46ef5d1644798755.jpg"; //default image if no image is uploaded
     }
@@ -146,7 +146,7 @@ app.patch("/blog/:id", upload.single('image'), async (req, res) => {
     const { title, subtitle, description} = req.body;
     let imageName;
     if(req.file){
-        imageName = 'http://localhost:3000/' + req.file.filename;
+        imageName = 'https://mern3-project.onrender.com/' + req.file.filename;
         const blog = await Blog.findById(id);
         const oldImageName = blog.image; //get image name from database to delete the image from storage folder
         fs.unlink(`./storage/${oldImageName}`, (err) => { //delete image from storage folder
