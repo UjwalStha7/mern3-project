@@ -14,7 +14,7 @@ const cors = require('cors');
 
 app.use(cors(
     {
-    origin : ['http://localhost:5173', 'https://mern3-project.onrender.com/'] //allow access to frontend running on port 3000
+    origin : ['http://localhost:5173', 'https://mern3-fullstack.vercel.app'] //allow access to frontend running on port 3000
     }
 ));
  
